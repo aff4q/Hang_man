@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <style media="screen">
+
+    #hoved{
+      border: 2px solid #000000;
+      text-align: center;
+      width: 60%;
+      margin: 100px auto;
+      padding: 50px;
+    }
+    .standar{
+      background-color: lightgrey;
+      padding: 20px;
+      width: 60%;
+      margin: 10px auto;
+    }
+      .rod{
+        background-color: red;
+        padding: 20px;
+        width: 60%;
+        margin: 10px auto;
+      }
+      .gronn{
+        background-color: green;
+        padding: 20px;
+        width: 60%;
+        margin: 10px auto;
+      }
+    </style>
+
+  </head>
+  <body>
+
+    <div id="hoved">
+
+      <label for="gjett">gjett en bokstav om gangen:</label>
+      <input id="gjett" type="text" placeholder="a, b, c, ...">
+      <button id="knapp" type="button" onclick="gjetter()">knapp</button>
+
+      <p class="standar" id="tekst"></p>
+      <p class="standar" id="tekst_gjett">gjettede bokstaver:</p>
+      <p class="gronn" id="liv1"></p>
+      <p class="gronn" id="liv2"></p>
+      <p class="gronn" id="liv3"></p>
+      <p class="gronn" id="liv4"></p>
+      <p class="gronn" id="liv5"></p>
+
+    </div>
+
+    <script type="text/javascript">
+      let ord = ["b", "e", "r", "g", "e", "n"]
+      let riktigeBokstaver  = []
+      for (var i = 0; i < ord.length; i++) {
+        riktigeBokstaver.push("__ ")
+      }
+      let gjettedeBokstaver = []
+
+      let gjettEL = document.getElementById('gjett')
+      let tekstEL = document.getElementById('tekst')
+      let tekst_gjettEL = document.getElementById('tekst_gjett')
+      let liv1EL = document.getElementById('liv1')
+      let liv2EL = document.getElementById('liv2')
+      let liv3EL = document.getElementById('liv3')
+      let liv4EL = document.getElementById('liv4')
+      let liv5EL = document.getElementById('liv5')
+
+
+
+      let knappEL = document.getElementById('knapp')
+
+      gjettEL.addEventListener("keypress", function(event) { //trenger ikke dette
+        if (event.key === "Enter") {
+          event.preventDefault();
+          document.getElementById('knappEL'),
+          gjetter();
+        }
+      });
+
+      for (var i = 0; i < riktigeBokstaver.length; i++) {
+        tekstEL.innerHTML += riktigeBokstaver[i]
+      }
+
+      let liv = 0
+
+      let liv_array = [liv1EL, liv2EL, liv3EL, liv4EL, liv5EL]
+
+      function gjetter() {
+        tekstEL.innerHTML = "" //resetter teaksten
+        gjettedeBokstaver.push(gjettEL.value)
+        tekst_gjettEL.innerHTML = "gjettede bokstaver: "
+
+        for (var i = 0; i < gjettedeBokstaver.length; i++) {
+          tekst_gjettEL.innerHTML += gjettedeBokstaver[i] + " " //plusser på verdigende
+        }
+
+
+        let antall_riktig_bokstaver = 0
+
+        for (var i = 0; i < ord.length; i++) {
+          if (ord[i] == gjettEL.value) {
+            riktigeBokstaver.splice(i, 1, gjettEL.value)
+          }else {
+              antall_riktig_bokstaver++
+          }
+          tekstEL.innerHTML += riktigeBokstaver[i]
+        }
+
+        if (liv == liv_array.length) {
+          tekstEL.innerHTML = "Du tapte. gå videre med livet ditt."
+          knappEL.disabled = true;
+          gjettEL.disabled = true;
+        }else if (antall_riktig_bokstaver == ord.length) { //du fikk ingen riktige bokstaver
+          liv_array[liv].setAttribute("class", "rod") //liv verdigende går gjennom liv_array
+          liv++// kjører gjennom alle livene
+
+        }
+        let vinner_ord = 0
+        for (var i = 0; i < ord.length; i++) {
+          if (ord[i] == riktigeBokstaver[i]) {
+            vinner_ord++
+          }
+        }
+        if (vinner_ord == ord.length) {
+          tekstEL.innerHTML = "Du vant. gå videre med livet ditt."
+          knappEL.disabled = true;
+          gjettEL.disabled = true;
+        }
+        gjettEL.value = ""
+      }
+      
+    </script>
+
+  </body>
+</html>
